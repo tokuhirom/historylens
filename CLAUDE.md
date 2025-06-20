@@ -74,3 +74,7 @@ The extension tracks activities on:
 
 ## Pre-Commit Checks
 - Run `npm run format` `npm run lint` `npm run build` `npm run test` before commit and check the command result.
+
+## Git Workflow
+- Don't commit to the main branch directly, create new branch for each modification
+- Send pull request on GitHub after commit
