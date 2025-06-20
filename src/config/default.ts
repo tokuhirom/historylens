@@ -18,6 +18,7 @@ export const DEFAULT_CONFIG: DomainConfig = [
   { pattern: 'https://*.blogspot.com/*', category: '📝 Read Article' },
   { pattern: 'https://gigazine.net/news/*', category: '📝 Read Article' },
   { pattern: 'https://sakumaga.sakura.ad.jp/entry/*', category: '📝 Read Article' },
+  { pattern: 'https://cloud.sakura.ad.jp/news/*', category: '📝 Read Article' },
 
   // News patterns
   { pattern: 'https://www.nikkei.com/article/*', category: '📰 Read News' },
