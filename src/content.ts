@@ -11,7 +11,7 @@ async function recordPageActivity() {
 
   // Wait a bit for dynamic title updates on SPAs like X/Twitter
   let title = document.title;
-  
+
   // For X/Twitter, wait for the title to be properly set
   if (currentUrl.includes('x.com') || currentUrl.includes('twitter.com')) {
     // Try to get title from og:title meta tag first
@@ -20,14 +20,14 @@ async function recordPageActivity() {
       title = ogTitle;
     } else if (!title || title === 'X' || title === 'Twitter') {
       // Wait a bit for title to update
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      await new Promise((resolve) => setTimeout(resolve, 1000));
       title = document.title;
-      
+
       // If still no good title, try to extract from tweet text
       if (!title || title === 'X' || title === 'Twitter') {
         const tweetText = document.querySelector('[data-testid="tweetText"]')?.textContent;
         if (tweetText) {
-          title = tweetText.slice(0, 100) + '...';
+          title = `${tweetText.slice(0, 100)}...`;
         }
       }
     }
@@ -53,7 +53,11 @@ async function recordPageActivity() {
     bodyText
   };
 
-  console.log('📄 Recording entry:', { url: entry.url, title: entry.title, category: entry.category });
+  console.log('📄 Recording entry:', {
+    url: entry.url,
+    title: entry.title,
+    category: entry.category
+  });
 
   // Send to background script
   chrome.runtime.sendMessage<LogActivityMessage, LogActivityResponse>(
