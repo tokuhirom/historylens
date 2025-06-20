@@ -1,0 +1,47 @@
+{
+    "name": "historylens-extension",
+    "version": "0.1.0",
+    "description": "Smart browsing history manager Chrome extension",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build && vite build --config vite.config.content.js",
+        "preview": "vite preview",
+        "prepare": "husky install",
+        "lint": "biome check --write src/",
+        "lint:check": "biome check src/",
+        "format": "biome format --write src/",
+        "format:check": "biome format src/",
+        "test": "vitest",
+        "test:ui": "vitest --ui",
+        "test:run": "vitest run"
+    },
+    "keywords": [
+        "chrome-extension",
+        "vite",
+        "indexeddb",
+        "manifest-v3"
+    ],
+    "author": "あなたの名前",
+    "license": "MIT",
+    "devDependencies": {
+        "@biomejs/biome": "^2.0.0",
+        "@vitest/ui": "^3.2.4",
+        "biome": "^0.3.3",
+        "happy-dom": "^18.0.1",
+        "husky": "^9.1.7",
+        "lint-staged": "^16.1.2",
+        "typescript": "^5.8.3",
+        "vite": "^6.3.5",
+        "vite-plugin-static-copy": "^3.0.2",
+        "vitest": "^3.2.4"
+    },
+    "dependencies": {
+        "@preact/preset-vite": "^2.10.1",
+        "date-fns": "^4.1.0",
+        "fuse.js": "^7.1.0",
+        "preact": "^10.26.9"
+    },
+    "lint-staged": {
+        "*.{js,ts,jsx,tsx,json,html}": "biome check --write"
+    }
+}

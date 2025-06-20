@@ -1,0 +1,35 @@
+{
+  "manifest_version": 3,
+  "name": "HistoryLens",
+  "version": "0.1",
+  "description": "Smart browsing history manager with automatic categorization and insights.",
+  "permissions": ["storage", "scripting", "tabs", "alarms"],
+  "action": {
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "48": "icons/icon48.png",
+      "128": "icons/icon128.png"
+    },
+    "default_title": "Open HistoryLens"
+  },
+  "host_permissions": [
+    "https://*/*"
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://*/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "options_page": "options.html",
+  "icons": {
+    "16": "icons/icon16.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  }
+}
