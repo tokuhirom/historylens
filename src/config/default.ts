@@ -56,6 +56,13 @@ export const DEFAULT_CONFIG: DomainConfig = [
   { pattern: 'https://x.com/*', category: '🐦 Browsed Social Media' },
   { pattern: 'https://twitter.com/*', category: '🐦 Browsed Social Media' },
 
+  // Video patterns
+  { pattern: 'https://www.youtube.com/watch*', category: '📺 Watched Video' },
+  { pattern: 'https://youtu.be/*', category: '📺 Watched Video' },
+  { pattern: 'https://www.nicovideo.jp/watch/*', category: '📺 Watched Video' },
+  { pattern: 'https://vimeo.com/*', category: '📺 Watched Video' },
+  { pattern: 'https://www.twitch.tv/*', category: '📺 Watched Video' },
+
   // Ignored patterns
   { pattern: 'https://duckduckgo.com/*', category: '🚫 Ignored' }
 ];
