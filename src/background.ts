@@ -113,8 +113,19 @@ chrome.alarms.onAlarm.addListener((alarm) => {
   }
 });
 
-// Cleanup on startup
-chrome.runtime.onStartup.addListener(() => {
+// Cleanup on startup and merge new default patterns
+chrome.runtime.onStartup.addListener(async () => {
+  // Merge new default patterns if any
+  const result = await chrome.storage.sync.get('domainConfig');
+  if (result.domainConfig) {
+    const mergedConfig = mergeConfigs(result.domainConfig, DEFAULT_CONFIG);
+    // Only update if there are new patterns
+    if (mergedConfig.length > result.domainConfig.length) {
+      await chrome.storage.sync.set({ domainConfig: mergedConfig });
+      console.log('✅ Added new default patterns on startup');
+    }
+  }
+
   cleanupOldEntries();
 });
 
