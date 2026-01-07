@@ -39,7 +39,7 @@
         "@preact/preset-vite": "^2.10.1",
         "date-fns": "^4.1.0",
         "fuse.js": "^7.1.0",
-        "preact": "^10.26.9"
+        "preact": "^10.28.2"
     },
     "lint-staged": {
         "*.{js,ts,jsx,tsx,json,html}": "biome check --write"
