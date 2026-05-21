@@ -170,22 +170,31 @@ chrome.runtime.onMessage.addListener(
       openDatabase().then((db) => {
         const tx = db.transaction('activity', 'readwrite');
         const store = tx.objectStore('activity');
-
         const now = new Date().toISOString();
-        const entry: ActivityEntry = {
-          url: message.entry.url,
-          title: message.entry.title,
-          category: message.entry.category,
-          bodyText: message.entry.bodyText || '',
-          firstSeenAt: message.entry.firstSeenAt || now,
-          updatedAt: now
-        };
 
-        const req = store.put(entry);
-        req.onsuccess = () => {
-          sendResponse({ status: 'ok' });
+        // Read existing entry first to preserve firstSeenAt on re-visits
+        const getReq = store.get(message.entry.url);
+        getReq.onsuccess = () => {
+          const existing: ActivityEntry | undefined = getReq.result;
+          const entry: ActivityEntry = {
+            url: message.entry.url,
+            title: message.entry.title,
+            category: message.entry.category,
+            bodyText: message.entry.bodyText || '',
+            firstSeenAt: existing?.firstSeenAt ?? now,
+            updatedAt: now
+          };
+
+          const putReq = store.put(entry);
+          putReq.onsuccess = () => {
+            sendResponse({ status: 'ok' });
+          };
+          putReq.onerror = (e: Event) => {
+            const error = (e.target as IDBRequest).error;
+            sendResponse({ status: 'error', error });
+          };
         };
-        req.onerror = (e: Event) => {
+        getReq.onerror = (e: Event) => {
           const error = (e.target as IDBRequest).error;
           sendResponse({ status: 'error', error });
         };
