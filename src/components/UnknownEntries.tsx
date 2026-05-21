@@ -35,11 +35,7 @@ export const UnknownEntries: FunctionalComponent<UnknownEntriesProps> = ({
   const [isExpanded, setIsExpanded] = useState(false);
   const [existingCategories, setExistingCategories] = useState<string[]>([]);
 
-  if (entries.length === 0) {
-    return null;
-  }
-
-  // Load existing categories on mount
+  // Load existing categories on mount (must be before early return to follow Rules of Hooks)
   useEffect(() => {
     const loadExistingCategories = async () => {
       const result = await chrome.storage.sync.get('domainConfig');
@@ -49,6 +45,10 @@ export const UnknownEntries: FunctionalComponent<UnknownEntriesProps> = ({
     };
     loadExistingCategories();
   }, []);
+
+  if (entries.length === 0) {
+    return null;
+  }
 
   // Handle category input change and show suggestions
   const handleCategoryInput = (value: string) => {
