@@ -29,7 +29,7 @@
         "biome": "^0.3.3",
         "happy-dom": "^20.8.9",
         "husky": "^9.1.7",
-        "lint-staged": "^16.1.2",
+        "lint-staged": "^17.0.0",
         "typescript": "^5.8.3",
         "vite": "^6.4.2",
         "vite-plugin-static-copy": "^3.0.2",
