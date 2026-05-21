@@ -72,36 +72,40 @@ async function recategorizeAllEntries() {
   const result = await chrome.storage.sync.get('domainConfig');
   const config: DomainConfig = result.domainConfig || DEFAULT_CONFIG;
 
-  // Get all entries
-  const tx = db.transaction('activity', 'readwrite');
-  const store = tx.objectStore('activity');
-
-  const getAllReq = store.getAll();
-  const allEntries = await new Promise<ActivityEntry[]>((resolve) => {
-    getAllReq.onsuccess = () => resolve(getAllReq.result);
+  // Read all entries in one transaction, then close it before awaiting
+  const allEntries = await new Promise<ActivityEntry[]>((resolve, reject) => {
+    const tx = db.transaction('activity', 'readonly');
+    const req = tx.objectStore('activity').getAll();
+    req.onsuccess = () => resolve(req.result);
+    req.onerror = () => reject(req.error);
   });
 
   console.log(`📊 Recategorizing ${allEntries.length} entries...`);
 
-  // Update each entry with new category
-  for (const entry of allEntries) {
+  const toUpdate = allEntries.filter((entry) => {
     const { category } = categorizePage(entry.url, config);
+    return entry.category !== category;
+  });
 
-    // Update if category changed
-    if (entry.category !== category) {
-      const updatedEntry = {
-        ...entry,
-        category
-      };
-
-      await new Promise((resolve) => {
-        const putReq = store.put(updatedEntry);
-        putReq.onsuccess = () => resolve(true);
-      });
-    }
+  if (toUpdate.length === 0) {
+    console.log('✅ Recategorization complete (no changes needed)');
+    return;
   }
 
-  console.log('✅ Recategorization complete');
+  // Write all updates in a single new transaction (no await inside)
+  await new Promise<void>((resolve, reject) => {
+    const tx = db.transaction('activity', 'readwrite');
+    const store = tx.objectStore('activity');
+    tx.oncomplete = () => resolve();
+    tx.onerror = () => reject(tx.error);
+
+    for (const entry of toUpdate) {
+      const { category } = categorizePage(entry.url, config);
+      store.put({ ...entry, category });
+    }
+  });
+
+  console.log(`✅ Recategorization complete (${toUpdate.length} entries updated)`);
 }
 
 // Run cleanup daily
