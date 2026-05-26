@@ -31,7 +31,7 @@
         "husky": "^9.1.7",
         "lint-staged": "^17.0.0",
         "typescript": "^6.0.0",
-        "vite": "^6.4.2",
+        "vite": "^8.0.0",
         "vite-plugin-static-copy": "^4.0.0",
         "vitest": "^4.0.0"
     },
