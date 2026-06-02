@@ -104,14 +104,20 @@ export const WeeklyReport: FunctionalComponent = () => {
         <button type="button" onClick={() => setWeekOffset(weekOffset - 1)}>
           ← Previous Week
         </button>
-        <button type="button" onClick={() => setWeekOffset(weekOffset + 1)}>
+        <button
+          type="button"
+          onClick={() => setWeekOffset(weekOffset + 1)}
+          disabled={weekOffset >= 0}
+        >
           Next Week →
         </button>
       </div>
       <div id="weeklyLogs">
-        {logsByDay.map(({ dateStr, weekday, grouped }) => (
-          <DaySection key={dateStr} dateStr={dateStr} weekday={weekday} grouped={grouped} />
-        ))}
+        {logsByDay
+          .filter(({ dateStr }) => dateStr <= format(new Date(), 'yyyy-MM-dd'))
+          .map(({ dateStr, weekday, grouped }) => (
+            <DaySection key={dateStr} dateStr={dateStr} weekday={weekday} grouped={grouped} />
+          ))}
       </div>
       {unknownEntries.length > 0 && (
         <UnknownEntries entries={unknownEntries} onCategorized={handleCategorized} />
